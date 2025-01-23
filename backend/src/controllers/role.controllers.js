@@ -13,7 +13,7 @@ export const addRole = asyncHandler(async (req, res) => {
 });
 
 export const listAllRoles = asyncHandler(async (req, res) => {
-    const roles = await ROLE.find().populate("userId", );
+    const roles = await ROLE.find();
     return SuccessResponse(res, null, roles);
 });
 
@@ -32,14 +32,14 @@ export const updateRoleDetails = asyncHandler(async (req, res) => {
 
     if (!name || !description) return ErrorResponse(res, 400, `Role details missing`);
 
-    const role = await ROLE.findById(roleId);
+    let role = await ROLE.findById(roleId);
     if (!role) return ErrorResponse(res, 404, `Role not found`);
 
     role.name = name;
     role.description = description;
-    await role.save();
+    role = await role.save();
 
-    return SuccessResponse(res, `Details updated`);
+    return SuccessResponse(res, `Details updated`, role);
 });
 
 export const deleteRole = asyncHandler(async (req, res) => {

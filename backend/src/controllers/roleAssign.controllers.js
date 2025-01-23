@@ -11,7 +11,7 @@ export const assignRole = asyncHandler(async (req, res) => {
 });
 
 export const listRoleAssigns = asyncHandler(async (req, res) => {
-    const roleAssigns = await ROLE_ASSIGN.find();
+    const roleAssigns = await ROLE_ASSIGN.find().populate("userId", "name email status").populate("roleId", "name description").exec();
     return SuccessResponse(res, null, roleAssigns);
 });
 
