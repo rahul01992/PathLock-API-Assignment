@@ -7,12 +7,12 @@ export const createNewUser = asyncHandler(async (req, res) => {
 
     if (!name || !email) return ErrorResponse(res, 400, `Fill all the details`);
 
-    const user = await USER.findOne({ email });
+    let user = await USER.findOne({ email });
     if (user) return ErrorResponse(res, 400, `User already exists`);
 
-    await USER.create({ name, email });
+    user = await USER.create({ name, email, status: "Active" });
 
-    return SuccessResponse(res, `New user created`);
+    return SuccessResponse(res, `New user created`, user);
 });
 
 export const retrieveAllUsers = asyncHandler(async (req, res) => {
@@ -34,15 +34,15 @@ export const updateUserDetails = asyncHandler(async (req, res) => {
 
     const { name } = req.body;
 
-    const user = await USER.findById(userId);
+    let user = await USER.findById(userId);
     if (!user) return ErrorResponse(res, 404, `User not found`);
 
     // user.status = user.status === "Active" ? "Inactive" : "Active";
     user.name = name;
 
-    await user.save();
+    user = await user.save();
 
-    return SuccessResponse(res, `Status updated successfully`);
+    return SuccessResponse(res, `Status updated successfully`, user);
 });
 
 export const softDeleteUser = asyncHandler(async (req, res) => {
