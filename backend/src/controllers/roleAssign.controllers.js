@@ -16,5 +16,8 @@ export const listRoleAssigns = asyncHandler(async (req, res) => {
 });
 
 export const deleteRoleAssign = asyncHandler(async (req, res) => {
-    
+    const roleAssignId = req.params.id;
+    await ROLE_ASSIGN.findByIdAndDelete(roleAssignId);
+
+    return SuccessResponse(res, `Role unassigned`);
 });
